@@ -1,0 +1,9 @@
+aiohttp>=3.7.4.post0
+aiohttp-apispec==2.2.1
+pyyaml==5.4.1
+marshmallow~=3.13.0
+aiohttp-apispec==2.2.1
+aiohttp-session==2.9.0
+cryptography==3.4.7
+pytest==6.2.4
+pytest-aiohttp==0.3.0

@@ -1,0 +1,12 @@
+user_token: вставьте_ваш_токен_вместо_этой_строки
+
+session:
+  key: key_to_generate
+admin:
+  email: admin@admin.com
+  password: admin
+bot:
+  token: group_token
+  group_id: 1
+
+
