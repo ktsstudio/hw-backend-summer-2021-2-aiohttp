@@ -1,4 +1,4 @@
-from app.store.vk_api.dataclasses import Update, UpdateObject, Message
+from app.store.vk_api.dataclasses import Update, UpdateObject, Message, UpdateMessage
 
 
 class TestHandleUpdates:
@@ -12,9 +12,12 @@ class TestHandleUpdates:
                 Update(
                     type="message_new",
                     object=UpdateObject(
-                        id=1,
-                        user_id=1,
-                        body="kek",
+                        message=UpdateMessage(
+                            id=1,
+                            from_id=1,
+                            text="kek",
+                        ),
+
                     ),
                 )
             ]
