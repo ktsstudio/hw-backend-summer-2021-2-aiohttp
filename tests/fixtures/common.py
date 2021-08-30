@@ -1,5 +1,6 @@
 import os
 from unittest.mock import AsyncMock
+
 import pytest
 from aiohttp.test_utils import TestClient, loop_context
 
@@ -54,7 +55,7 @@ def cli(aiohttp_client, loop, server) -> TestClient:
 async def authed_cli(cli, config) -> TestClient:
     await cli.post(
         "/admin.login",
-        data={
+        json={
             "email": config.admin.email,
             "password": config.admin.password,
         },
