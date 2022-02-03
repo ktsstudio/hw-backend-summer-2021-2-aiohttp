@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from unittest.mock import AsyncMock
 
 import pytest
@@ -18,9 +18,7 @@ def loop():
 @pytest.fixture(scope="session")
 def server():
     app = setup_app(
-        config_path=os.path.join(
-            os.path.abspath(os.path.dirname(__file__)), "..", "config.yml"
-        )
+        config_path=Path(__file__).parent.absolute() / '..' / 'config.yml'
     )
     app.on_startup.clear()
     app.on_shutdown.clear()
