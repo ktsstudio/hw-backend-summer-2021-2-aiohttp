@@ -1,5 +1,9 @@
+import json
 from aiohttp_apispec import request_schema, response_schema
-from aiohttp.web_exceptions import HTTPMethodNotAllowed
+from aiohttp.web_exceptions import (
+    HTTPConflict,
+    HTTPMethodNotAllowed,
+)
 
 from app.quiz.schemes import (
     ThemeSchema,
@@ -21,15 +25,16 @@ class ThemeAddView(View, AuthRequiredMixin):
         
         theme = await self.store.quizzes.get_theme_by_title(title)
         if theme is not None:
-            return error_json_response(http_status=409, 
-                                            message="theme already exists",
-                                            data={ "title": title })
+            raise HTTPConflict(
+                reason="theme already exists",
+                text=json.dumps({ "title": title })
+            )
 
         theme = await self.store.quizzes.create_theme(title=title)
         return json_response(data=ThemeSchema().dump(theme))
 
     async def get(self):
-        raise HTTPMethodNotAllowed(method='GET', allowed_methods=['POST'], text='{}')
+        raise HTTPMethodNotAllowed(method='GET', allowed_methods=['POST'])
 
 
 class ThemeListView(View):
