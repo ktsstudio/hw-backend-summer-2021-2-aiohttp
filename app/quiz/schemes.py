@@ -22,7 +22,7 @@ class AnswerSchema(Schema):
 
 
 class ThemeListSchema(Schema):
-    pass
+    themes = fields.List(fields.Nested(lambda: ThemeSchema()), required=True)
 
 
 class ThemeIdSchema(Schema):

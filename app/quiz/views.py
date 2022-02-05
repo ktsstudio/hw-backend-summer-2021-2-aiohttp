@@ -6,13 +6,14 @@ from aiohttp.web_exceptions import (
 )
 
 from app.quiz.schemes import (
+    ThemeListSchema,
     ThemeSchema,
     ThemeAddRequestSchema,
     ThemeAddResponseSchema
 )
 from app.web.app import View
 from app.web.mixins import AuthRequiredMixin
-from app.web.utils import json_response, error_json_response
+from app.web.utils import json_response
 
 
 class ThemeAddView(View, AuthRequiredMixin):
@@ -21,9 +22,9 @@ class ThemeAddView(View, AuthRequiredMixin):
     async def post(self):
         await self.check_authorization()
 
-        title = self.data['title']
-        
+        title = self.data['title']        
         theme = await self.store.quizzes.get_theme_by_title(title)
+
         if theme is not None:
             raise HTTPConflict(
                 reason="theme already exists",
@@ -37,9 +38,15 @@ class ThemeAddView(View, AuthRequiredMixin):
         raise HTTPMethodNotAllowed(method='GET', allowed_methods=['POST'])
 
 
-class ThemeListView(View):
+class ThemeListView(View, AuthRequiredMixin):
     async def get(self):
-        raise NotImplementedError
+        await self.check_authorization()
+
+        themes = await self.store.quizzes.list_themes()
+        return json_response(data=ThemeListSchema().dump({"themes": themes}))
+
+    async def post(self):
+        raise HTTPMethodNotAllowed(method='POST', allowed_methods=['GET'])
 
 
 class QuestionAddView(View):
