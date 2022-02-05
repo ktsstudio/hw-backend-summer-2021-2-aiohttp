@@ -7,11 +7,18 @@ from app.quiz.models import Theme, Question, Answer
 class QuizAccessor(BaseAccessor):
     async def create_theme(self, title: str) -> Theme:
         theme = Theme(id=self.app.database.next_theme_id, title=str(title))
+        
         self.app.database.themes.append(theme)
         return theme
 
     async def get_theme_by_title(self, title: str) -> Optional[Theme]:
-        raise NotImplementedError
+        try:
+            theme = next(theme for theme
+                            in self.app.database.themes 
+                            if theme.title == title)
+            return theme
+        except StopIteration:
+            return None
 
     async def get_theme_by_id(self, id_: int) -> Optional[Theme]:
         raise NotImplementedError

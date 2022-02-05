@@ -5,6 +5,13 @@ class ThemeSchema(Schema):
     id = fields.Int(required=False)
     title = fields.Str(required=True)
 
+class ThemeAddRequestSchema(Schema):
+    title = fields.Str(required=True)
+    
+class ThemeAddResponseSchema(Schema):
+    id = fields.Int()
+    title = fields.Str()
+
 
 class QuestionSchema(Schema):
     pass
