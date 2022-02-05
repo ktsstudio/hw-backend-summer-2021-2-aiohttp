@@ -25,7 +25,7 @@ def server():
     app.store.vk_api = AsyncMock()
     app.store.vk_api.send_message = AsyncMock()
     app.on_startup.append(app.store.admins.connect)
-    app.on_shutdown.append(app.store.admins.connect)
+    app.on_shutdown.append(app.store.admins.disconnect)
     return app
 
 
