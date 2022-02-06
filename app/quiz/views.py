@@ -28,7 +28,7 @@ class ThemeAddView(View, AuthRequiredMixin):
     async def post(self):
         await self.check_authorization()
 
-        title = self.data['title']        
+        title = self.data["title"]        
         theme = await self.store.quizzes.get_theme_by_title(title)
 
         if theme is not None:
@@ -41,7 +41,7 @@ class ThemeAddView(View, AuthRequiredMixin):
         return json_response(data=ThemeSchema().dump(theme))
 
     async def get(self):
-        raise HTTPMethodNotAllowed(method='GET', allowed_methods=['POST'])
+        raise HTTPMethodNotAllowed(method="GET", allowed_methods=["POST"])
 
 
 class ThemeListView(View, AuthRequiredMixin):
@@ -52,7 +52,7 @@ class ThemeListView(View, AuthRequiredMixin):
         return json_response(data=ThemeListSchema().dump({"themes": themes}))
 
     async def post(self):
-        raise HTTPMethodNotAllowed(method='POST', allowed_methods=['GET'])
+        raise HTTPMethodNotAllowed(method="POST", allowed_methods=["GET"])
 
 
 class QuestionAddView(View, AuthRequiredMixin):
@@ -60,9 +60,9 @@ class QuestionAddView(View, AuthRequiredMixin):
     async def post(self):
         await self.check_authorization()
 
-        title = self.data['title']
-        theme_id = self.data['theme_id']
-        answers = self.data['answers']
+        title = self.data["title"]
+        theme_id = self.data["theme_id"]
+        answers = self.data["answers"]
 
         try:
             question = await self.store.quizzes.create_question(title, theme_id, answers)
@@ -88,7 +88,7 @@ class QuestionAddView(View, AuthRequiredMixin):
             
 
     async def get(self):
-        raise HTTPMethodNotAllowed(method='GET', allowed_methods=['POST'])
+        raise HTTPMethodNotAllowed(method="GET", allowed_methods=["POST"])
 
 
 class QuestionListView(View, AuthRequiredMixin):
@@ -96,10 +96,10 @@ class QuestionListView(View, AuthRequiredMixin):
         await self.check_authorization()
 
         params = self.request.rel_url.query
-        theme_id = int(params.get('theme_id', 0)) or None
+        theme_id = int(params.get("theme_id", 0)) or None
 
         questions = await self.store.quizzes.list_questions(theme_id)
         return json_response(data=QuestionListSchema().dump({"questions": questions}))
         
     async def post(self):
-        raise HTTPMethodNotAllowed(method='POST', allowed_methods=['GET'])
+        raise HTTPMethodNotAllowed(method="POST", allowed_methods=["GET"])

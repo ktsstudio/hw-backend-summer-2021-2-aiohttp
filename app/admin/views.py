@@ -21,8 +21,8 @@ class AdminLoginView(View):
     @request_schema(AdminLoginRequestSchema)
     @response_schema(AdminLoginResponseSchema, 200)
     async def post(self):
-        email = self.data['email']
-        password = self.data['password']
+        email = self.data["email"]
+        password = self.data["password"]
 
         admin = await self.store.admins.get_by_email(email)
         if admin is None or \
@@ -33,12 +33,12 @@ class AdminLoginView(View):
             )
             
         session = await new_session(request=self.request)
-        session['admin_id'] = admin.id
+        session["admin_id"] = admin.id
         
-        return json_response(data=AdminSchema(exclude=['password']).dump(admin))
+        return json_response(data=AdminSchema(exclude=["password"]).dump(admin))
 
     async def get(self):
-        raise HTTPMethodNotAllowed(method='GET', allowed_methods=['POST'])
+        raise HTTPMethodNotAllowed(method="GET", allowed_methods=["POST"])
 
 
 class AdminCurrentView(View, AuthRequiredMixin):
@@ -51,4 +51,4 @@ class AdminCurrentView(View, AuthRequiredMixin):
                 reason="invalid authorization id"
             )
             
-        return json_response(data=AdminSchema(exclude=['password']).dump(admin))        
+        return json_response(data=AdminSchema(exclude=["password"]).dump(admin))        

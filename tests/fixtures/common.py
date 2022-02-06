@@ -18,7 +18,7 @@ def loop():
 @pytest.fixture(scope="session")
 def server():
     app = setup_app(
-        config_path=Path(__file__).parent.absolute() / '..' / 'config.yml'
+        config_path=Path(__file__).parent.absolute() / ".." / "config.yml"
     )
     app.on_startup.clear()
     app.on_shutdown.clear()
