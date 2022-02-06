@@ -1,7 +1,16 @@
-from typing import Optional
+from dataclasses import asdict
+from typing import Any, Optional, Union
 
 from app.base.base_accessor import BaseAccessor
 from app.quiz.models import Theme, Question, Answer
+
+
+class DuplicationError(Exception):
+    pass
+
+
+class ConsistencyError(Exception):
+    pass
 
 
 class QuizAccessor(BaseAccessor):
@@ -33,12 +42,52 @@ class QuizAccessor(BaseAccessor):
         return self.app.database.themes[:]
 
     async def get_question_by_title(self, title: str) -> Optional[Question]:
-        raise NotImplementedError
+        try:
+            question = next(question for question
+                            in self.app.database.questions
+                            if question.title == title)
+            return question
+        except StopIteration:
+            return None
 
-    async def create_question(
-        self, title: str, theme_id: int, answers: list[Answer]
+    async def create_question(self, 
+        title: str, theme_id: int, 
+        # some obscure typing error with this Union
+        answers#: list[Union[dict[str: Any], Answer]]
     ) -> Question:
-        raise NotImplementedError
+        theme = await self.get_theme_by_id(theme_id)
+        if theme is None:
+            raise ConsistencyError("there is no theme with such id",
+                                    {
+                                        "title": title,
+                                        "theme_id": theme_id
+                                    })
+
+        duplicate_question = await self.get_question_by_title(title)
+        if duplicate_question is not None:
+            raise DuplicationError("there is a question with such title already",
+                                    {
+                                        "title": title,
+                                        "duplicate": asdict(duplicate_question)
+                                    })
+        
+        if answers and not isinstance(answers[0], Answer):
+            answers = [Answer(**answer) for answer in answers]
+
+        question = Question(
+            id=self.app.database.next_question_id, 
+            title=title,
+            theme_id=theme_id,
+            answers=answers,
+        )
+        
+        self.app.database.questions.append(question)
+        return question
 
     async def list_questions(self, theme_id: Optional[int] = None) -> list[Question]:
-        raise NotImplementedError
+        if theme_id is None:
+            return self.app.database.questions[:]
+        else:
+            return [question for question
+                    in self.app.database.questions 
+                    if question.theme_id == theme_id]
