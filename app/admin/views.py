@@ -13,7 +13,8 @@ from app.admin.schemes import (
     AdminLoginResponseSchema,
 )
 from app.web.app import View
-from app.web.utils import http_error_json_response, json_response
+from app.web.mixins import AuthRequiredMixin
+from app.web.utils import json_response
 
 
 class AdminLoginView(View):
@@ -40,16 +41,11 @@ class AdminLoginView(View):
         raise HTTPMethodNotAllowed(method='GET', allowed_methods=['POST'])
 
 
-class AdminCurrentView(View):
+class AdminCurrentView(View, AuthRequiredMixin):
     async def get(self):
-        session = await get_session(self.request)
-        id = session.get('admin_id', None)
-        if id is None:
-            raise HTTPUnauthorized(
-                reason="authorization required to proceed"
-            )
+        admin_id = await self.check_authorization()
             
-        admin = await self.store.admins.get_by_id(id)
+        admin = await self.store.admins.get_by_id(admin_id)
         if admin is None:
             raise HTTPForbidden(
                 reason="invalid authorization id"

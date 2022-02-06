@@ -3,11 +3,13 @@ from aiohttp.web_exceptions import HTTPUnauthorized
 
 
 class AuthRequiredMixin:
-    async def check_authorization(self):
+    async def check_authorization(self) -> int:
         session = await get_session(self.request)
 
-        id = session.get("admin_id", None)
-        if id is None:
+        admin_id = session.get("admin_id", None)
+        if admin_id is None:
             raise HTTPUnauthorized(
                 reason="authorization required to proceed"
             )
+
+        return admin_id
