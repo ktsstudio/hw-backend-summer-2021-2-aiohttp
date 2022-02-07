@@ -1,3 +1,4 @@
+import asyncio
 from asyncio import Task
 from typing import Optional
 
@@ -11,12 +12,14 @@ class Poller:
         self.poll_task: Optional[Task] = None
 
     async def start(self):
-        # TODO: добавить asyncio Task на запуск poll
-        raise NotImplementedError
+        self.is_running = True
+        self.poll_task = asyncio.create_task(self.poll())
 
     async def stop(self):
-        # TODO: gracefully завершить Poller
-        raise NotImplementedError
+        self.is_running = False
 
     async def poll(self):
-        raise NotImplementedError
+        while self.is_running:
+            updates = await self.store.vk_api.poll()
+            if updates:
+                await self.store.bots_manager.handle_updates(updates)
