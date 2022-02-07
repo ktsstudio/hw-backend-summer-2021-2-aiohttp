@@ -88,6 +88,12 @@ class QuizAccessor(BaseAccessor):
         if theme_id is None:
             return self.app.database.questions[:]
         else:
+            theme = await self.get_theme_by_id(theme_id)
+            if theme is None:
+                raise ConsistencyError("there is no theme with such id",
+                                        {
+                                            "theme_id": theme_id
+                                        })
             return [question for question
                     in self.app.database.questions 
                     if question.theme_id == theme_id]

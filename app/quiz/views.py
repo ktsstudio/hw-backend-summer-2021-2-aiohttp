@@ -133,8 +133,15 @@ class QuestionListView(View, AuthRequiredMixin):
         params = self.request['querystring']
         theme_id = int(params.get("theme_id", 0)) or None
 
-        questions = await self.store.quizzes.list_questions(theme_id)
-        return json_response(data=QuestionListSchema().dump({"questions": questions}))
+        try:
+            questions = await self.store.quizzes.list_questions(theme_id)
+            return json_response(data=QuestionListSchema().dump({"questions": questions}))
+        except ConsistencyError as e:
+            message, data = e.args
+            raise HTTPNotFound(
+                reason=message,
+                text=json.dumps(data)
+            )
         
     async def post(self):
         raise HTTPMethodNotAllowed(method="POST", allowed_methods=["GET"])
