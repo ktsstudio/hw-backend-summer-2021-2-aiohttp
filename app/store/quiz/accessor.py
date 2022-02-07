@@ -1,5 +1,5 @@
 from dataclasses import asdict
-from typing import Any, Optional, Union
+from typing import Optional, Union
 
 from app.base.base_accessor import BaseAccessor
 from app.quiz.models import Theme, Question, Answer
@@ -51,9 +51,7 @@ class QuizAccessor(BaseAccessor):
             return None
 
     async def create_question(self, 
-        title: str, theme_id: int, 
-        # some obscure typing error with this Union
-        answers#: list[Union[dict[str: Any], Answer]]
+        title: str, theme_id: int, answers: list[Union[dict, Answer]]
     ) -> Question:
         theme = await self.get_theme_by_id(theme_id)
         if theme is None:
