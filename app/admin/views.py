@@ -1,16 +1,15 @@
 import json
 from aiohttp.web_exceptions import (
     HTTPForbidden,
-    HTTPUnauthorized,
     HTTPMethodNotAllowed,
 )
-from aiohttp_apispec import request_schema, response_schema
-from aiohttp_session import new_session, get_session
+from aiohttp_apispec import docs, request_schema, response_schema
+from aiohttp_session import new_session
 
 from app.admin.schemes import (
     AdminSchema,
     AdminLoginRequestSchema,
-    AdminLoginResponseSchema,
+    AdminResponseSchema,
 )
 from app.web.app import View
 from app.web.mixins import AuthRequiredMixin
@@ -18,8 +17,16 @@ from app.web.utils import json_response
 
 
 class AdminLoginView(View):
+    @docs(
+        tags=["admin"],
+        summary="Log in admin",
+        description="Log in a registered admin with email and password",
+        responses={
+            200: {"description": "Logged in", "schema": AdminResponseSchema},
+            403: {"description": "Invalid password or email"},
+        },
+    )
     @request_schema(AdminLoginRequestSchema)
-    @response_schema(AdminLoginResponseSchema, 200)
     async def post(self):
         email = self.data["email"]
         password = self.data["password"]
@@ -42,13 +49,21 @@ class AdminLoginView(View):
 
 
 class AdminCurrentView(View, AuthRequiredMixin):
+    @docs(
+        tags=["admin"],
+        summary="Show current admin",
+        description="Show current session logged in admin",
+        responses={
+            200: {"description": "Current admin", "schema": AdminResponseSchema},
+            401: {"description": "Unauthorized"},
+            403: {"description": "Invalid credentials"},
+        },
+    )
     async def get(self):
         admin_id = await self.check_authorization()
             
         admin = await self.store.admins.get_by_id(admin_id)
         if admin is None:
-            raise HTTPForbidden(
-                reason="invalid authorization id"
-            )
+            raise HTTPForbidden(reason="invalid authorization id")
             
         return json_response(data=AdminSchema(exclude=["password"]).dump(admin))        

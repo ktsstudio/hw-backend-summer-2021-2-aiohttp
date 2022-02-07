@@ -32,6 +32,6 @@ async def error_handling_middleware(request: "Request", handler):
 
 
 def setup_middlewares(app: "Application"):
-    setup_aiohttp_apispec(app)
+    setup_aiohttp_apispec(app, swagger_path='/api_docs')
     app.middlewares.append(error_handling_middleware)
     app.middlewares.append(validation_middleware)

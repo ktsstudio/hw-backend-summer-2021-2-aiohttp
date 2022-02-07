@@ -15,7 +15,7 @@ class AdminLoginRequestSchema(Schema):
     password = fields.Str(description="password", required=True)
 
 
-class AdminLoginResponseSchema(Schema):
+class AdminResponseSchema(Schema):
     id = fields.Int()
     # it's worth to use fields.Email
     email = fields.Str()
