@@ -7,3 +7,4 @@ aiohttp-session==2.9.0
 cryptography==3.4.7
 pytest==6.2.4
 pytest-aiohttp==0.3.0
+markupsafe==2.0.1
