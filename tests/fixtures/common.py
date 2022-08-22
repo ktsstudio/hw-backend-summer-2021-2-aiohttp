@@ -24,6 +24,7 @@ def server():
     )
     app.on_startup.clear()
     app.on_shutdown.clear()
+    app.on_cleanup.clear()
     app.store.vk_api = AsyncMock()
     app.store.vk_api.send_message = AsyncMock()
     app.on_startup.append(app.store.admins.connect)
