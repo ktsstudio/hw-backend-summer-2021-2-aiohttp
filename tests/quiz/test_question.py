@@ -1,4 +1,4 @@
-from app.quiz.models import Question, Answer
+from app.quiz.models import Answer, Question
 from tests.quiz import question2dict
 from tests.utils import ok_response
 
@@ -156,12 +156,19 @@ class TestQuestionListView:
         resp = await authed_cli.get("/quiz.list_questions")
         assert resp.status == 200
         data = await resp.json()
-        assert data == ok_response(data={"questions": [question2dict(question_1)]})
+        assert data == ok_response(
+            data={"questions": [question2dict(question_1)]}
+        )
 
     async def test_several_questions(self, authed_cli, question_1, question_2):
         resp = await authed_cli.get("/quiz.list_questions")
         assert resp.status == 200
         data = await resp.json()
         assert data == ok_response(
-            data={"questions": [question2dict(question_1), question2dict(question_2)]}
+            data={
+                "questions": [
+                    question2dict(question_1),
+                    question2dict(question_2),
+                ]
+            }
         )

@@ -1,11 +1,11 @@
 from aiohttp.web import (
     Application as AiohttpApplication,
-    View as AiohttpView,
     Request as AiohttpRequest,
+    View as AiohttpView,
 )
 
 from app.admin.models import Admin
-from app.store import setup_store, Store
+from app.store import Store, setup_store
 from app.store.database.database import Database
 from app.web.config import Config, setup_config
 from app.web.logger import setup_logging

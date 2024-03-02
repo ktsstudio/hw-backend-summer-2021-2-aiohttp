@@ -1,4 +1,4 @@
-from app.quiz.models import Theme, Question, Answer
+from app.quiz.models import Answer, Question, Theme
 
 
 def theme2dict(theme: Theme):

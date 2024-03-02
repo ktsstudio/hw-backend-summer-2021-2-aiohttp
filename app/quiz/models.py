@@ -1,10 +1,9 @@
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
 class Theme:
-    id: Optional[int]
+    id: int | None
     title: str
 
 

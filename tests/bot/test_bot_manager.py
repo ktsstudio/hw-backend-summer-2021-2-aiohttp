@@ -1,4 +1,9 @@
-from app.store.vk_api.dataclasses import Update, UpdateObject, Message, UpdateMessage
+from app.store.vk_api.dataclasses import (
+    Message,
+    Update,
+    UpdateMessage,
+    UpdateObject,
+)
 
 
 class TestHandleUpdates:
@@ -25,6 +30,8 @@ class TestHandleUpdates:
         try:
             message: Message = store.vk_api.send_message.mock_calls[0].args[0]
         except IndexError:
-            message: Message = store.vk_api.send_message.mock_calls[0].kwargs["message"]
+            message: Message = store.vk_api.send_message.mock_calls[0].kwargs[
+                "message"
+            ]
         assert message.user_id == 1
         assert message.text

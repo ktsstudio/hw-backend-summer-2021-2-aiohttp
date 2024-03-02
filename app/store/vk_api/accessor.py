@@ -1,5 +1,4 @@
 import typing
-from typing import Optional
 
 from aiohttp.client import ClientSession
 
@@ -14,11 +13,11 @@ if typing.TYPE_CHECKING:
 class VkApiAccessor(BaseAccessor):
     def __init__(self, app: "Application", *args, **kwargs):
         super().__init__(app, *args, **kwargs)
-        self.session: Optional[ClientSession] = None
-        self.key: Optional[str] = None
-        self.server: Optional[str] = None
-        self.poller: Optional[Poller] = None
-        self.ts: Optional[int] = None
+        self.session: ClientSession | None = None
+        self.key: str | None = None
+        self.server: str | None = None
+        self.poller: Poller | None = None
+        self.ts: int | None = None
 
     async def connect(self, app: "Application"):
         # TODO: добавить создание aiohttp ClientSession,

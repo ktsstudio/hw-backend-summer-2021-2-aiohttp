@@ -37,7 +37,7 @@ def store(server) -> Store:
     return server.store
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(autouse=True)
 def clear_db(server):
     server.database.clear()
 
@@ -61,4 +61,4 @@ async def authed_cli(cli, config) -> TestClient:
             "password": config.admin.password,
         },
     )
-    yield cli
+    return cli

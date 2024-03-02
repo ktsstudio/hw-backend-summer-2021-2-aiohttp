@@ -25,7 +25,6 @@ HTTP_ERROR_CODES = {
 async def error_handling_middleware(request: "Request", handler):
     try:
         response = await handler(request)
-        return response
     except HTTPUnprocessableEntity as e:
         return error_json_response(
             http_status=400,
@@ -33,6 +32,8 @@ async def error_handling_middleware(request: "Request", handler):
             message=e.reason,
             data=json.loads(e.text),
         )
+
+    return response
     # TODO: обработать все исключения-наследники HTTPException и отдельно Exception, как server error
     #  использовать текст из HTTP_ERROR_CODES
 
