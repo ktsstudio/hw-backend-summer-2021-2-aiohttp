@@ -17,7 +17,6 @@ class TestHandleUpdates:
                             from_id=1,
                             text="kek",
                         ),
-
                     ),
                 )
             ]
@@ -26,6 +25,6 @@ class TestHandleUpdates:
         try:
             message: Message = store.vk_api.send_message.mock_calls[0].args[0]
         except IndexError:
-            message: Message = store.vk_api.send_message.mock_calls[0].kwargs['message']
+            message: Message = store.vk_api.send_message.mock_calls[0].kwargs["message"]
         assert message.user_id == 1
         assert message.text

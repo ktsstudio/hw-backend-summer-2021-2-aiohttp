@@ -26,8 +26,8 @@ class BotConfig:
 @dataclass
 class Config:
     admin: AdminConfig
-    session: SessionConfig = None
-    bot: BotConfig = None
+    session: SessionConfig | None = None
+    bot: BotConfig | None = None
 
 
 def setup_config(app: "Application", config_path: str):

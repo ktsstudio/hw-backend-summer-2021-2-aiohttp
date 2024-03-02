@@ -1,6 +1,4 @@
-from app.quiz.schemes import (
-    ThemeSchema,
-)
+from app.quiz.schemes import ThemeSchema
 from app.web.app import View
 from app.web.utils import json_response
 
