@@ -16,7 +16,7 @@ from app.web.routes import setup_routes
 class Application(AiohttpApplication):
     config: Config | None = None
     store: Store | None = None
-    database: Database | None = None
+    database: Database = Database()
 
 
 class Request(AiohttpRequest):

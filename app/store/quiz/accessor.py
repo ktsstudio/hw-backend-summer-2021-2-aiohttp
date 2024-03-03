@@ -4,7 +4,7 @@ from app.quiz.models import Answer, Question, Theme
 
 class QuizAccessor(BaseAccessor):
     async def create_theme(self, title: str) -> Theme:
-        theme = Theme(id=self.app.database.next_theme_id, title=str(title))
+        theme = Theme(id=self.app.database.next_theme_id, title=title)
         self.app.database.themes.append(theme)
         return theme
 

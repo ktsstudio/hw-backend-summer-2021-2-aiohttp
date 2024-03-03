@@ -8,7 +8,7 @@ if typing.TYPE_CHECKING:
 
 
 class AdminAccessor(BaseAccessor):
-    async def connect(self, app: "Application"):
+    async def connect(self, app: "Application") -> None:
         # TODO: создать админа по данным в config.yml здесь
         raise NotImplementedError
 

@@ -1,4 +1,5 @@
 import typing
+from urllib.parse import urlencode, urljoin
 
 from aiohttp.client import ClientSession
 
@@ -8,6 +9,8 @@ from app.store.vk_api.poller import Poller
 
 if typing.TYPE_CHECKING:
     from app.web.app import Application
+
+API_VERSION = "5.131"
 
 
 class VkApiAccessor(BaseAccessor):
@@ -31,11 +34,8 @@ class VkApiAccessor(BaseAccessor):
 
     @staticmethod
     def _build_query(host: str, method: str, params: dict) -> str:
-        url = host + method + "?"
-        if "v" not in params:
-            params["v"] = "5.131"
-        url += "&".join([f"{k}={v}" for k, v in params.items()])
-        return url
+        params.setdefault("v", API_VERSION)
+        return f"{urljoin(host, method)}?{urlencode(params)}"
 
     async def _get_long_poll_service(self):
         raise NotImplementedError

@@ -6,11 +6,11 @@ class ThemeSchema(Schema):
     title = fields.Str(required=True)
 
 
-class QuestionSchema(Schema):
+class AnswerSchema(Schema):
     pass
 
 
-class AnswerSchema(Schema):
+class QuestionSchema(Schema):
     pass
 
 
